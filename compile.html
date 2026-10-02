@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+  <meta charset="utf-8" /><title>カード識別データの再生成</title>
+  <body
+    style="
+      font: 18px system-ui;
+      background: #142d3c;
+      color: white;
+      padding: 30px;
+    "
+  >
+    <h1>カード識別データ</h1>
+    <p>通常のゲーム実行には不要です。カード画像を変更した場合に使います。</p>
+    <button id="start">5枚のカードをコンパイル</button>
+    <p id="progress"></p>
+    <script type="module">
+      import { Compiler } from "./vendor/mindar-image.prod.js";
+      window.compileTargets = async () => {
+        const imgs = await Promise.all(
+          ["sundial", "spring", "summer", "autumn", "winter"].map(
+            (id) =>
+              new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = `assets/cards/${id}.jpg`;
+              }),
+          ),
+        );
+        const c = new Compiler();
+        await c.compileImageTargets(
+          imgs,
+          (p) =>
+            (document.getElementById("progress").textContent =
+              `${p.toFixed(0)}%`),
+        );
+        const data = c.exportData();
+        window.targetBytes = Array.from(new Uint8Array(data));
+        document.getElementById("progress").textContent = "完了";
+        return window.targetBytes;
+      };
+      document.getElementById("start").onclick = async () => {
+        try {
+          const data = await window.compileTargets();
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(new Blob([new Uint8Array(data)]));
+          a.download = "targets.mind";
+          a.click();
+        } catch (e) {
+          document.getElementById("progress").textContent = e.message;
+        }
+      };
+    </script>
+  </body>
+</html>

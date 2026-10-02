@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>失われた時間を探せ！ | 靱公園</title>
+    <meta
+      name="description"
+      content="小Hと四季を巡り、靱公園の時間を取り戻そう。"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23172e42'/%3E%3Cpath d='M16 6v11l7 4' fill='none' stroke='%2374e4cd' stroke-width='3'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="vendor/aframe.min.js"></script>
+  </head>
+  <body>
+    <video
+      id="camera-feed"
+      autoplay
+      muted
+      playsinline
+      aria-hidden="true"
+    ></video>
+    <div id="scene-host"></div>
+    <header id="hud">
+      <a href="./" aria-label="最初の画面へ">UTSUBO <span>TIME TRAVEL</span></a>
+      <div id="count">時間のかけら 0 / 4</div>
+    </header>
+    <main id="welcome" class="sheet">
+      <div class="eyebrow">靱公園 · 四季の旅</div>
+      <h1>失われた<br /><em>時間</em>を探せ！</h1>
+      <p>時間旅行者・小Hと一緒に、<br />止まった公園の時間を取り戻そう。</p>
+      <div id="mode-select">
+        <div class="mode-title">遊び方を選んでください</div>
+        <button id="seated">
+          座って巡る<small>5枚のカードで、同じ場所から五つの地点へ</small>
+        </button>
+        <button id="roaming" class="secondary" disabled>
+          公園を歩いて巡る<small>準備中 · GPS案内と実景認識を追加予定</small>
+        </button>
+      </div>
+      <div id="device-select" hidden>
+        <div class="mode-title">座って巡る · 使う機器を選んでください</div>
+        <button id="phone">
+          スマートフォン<small>カメラでカードを読み取る</small>
+        </button>
+        <button id="quest" class="secondary">
+          ARヘッドセット · Quest 3<small>透視AR・コントローラーで選択</small>
+        </button>
+        <button id="preview" class="text-button">カメラなしでプレビュー</button>
+        <button id="choose-mode" class="text-button">遊び方の選択に戻る</button>
+      </div>
+      <a href="print.html" class="print-link" target="_blank" rel="noopener"
+        >5枚のカードを印刷</a
+      >
+    </main>
+    <div id="tracker-status" role="status" hidden></div>
+    <section id="dialogue" class="dialogue" hidden aria-label="小Hの案内">
+      <div class="dialogue-heading">
+        <span>小H</span><span id="spot-label">はじまり</span>
+      </div>
+      <h2 id="dialogue-title"></h2>
+      <p id="message" aria-live="polite"></p>
+      <div id="interaction-progress" hidden><progress id="progress-bar" max="1" value="0"></progress><span id="progress-label">0%</span></div>
+      <div class="dialogue-actions">
+        <button id="back" class="secondary" hidden>ひとつ前へ</button>
+        <button id="action"></button>
+      </div>
+    </section>
+    <aside id="error" class="error" hidden role="alert">
+      <p id="error-text"></p>
+      <button id="retry">もう一度試す</button
+      ><button id="error-preview" class="secondary">
+        プレビューで確認する
+      </button>
+    </aside>
+    <details id="debug" hidden>
+      <summary>開発用コントロール</summary>
+      <label
+        >地点
+        <select id="debug-spot">
+          <option value="sundial">日時計</option>
+          <option value="spring">春</option>
+          <option value="summer">夏</option>
+          <option value="autumn">秋</option>
+          <option value="winter">冬</option>
+        </select></label
+      ><button id="debug-trigger">認識をシミュレート</button
+      ><button id="debug-form">小Hの形態を切り替え</button
+      ><label>小Hの動き
+        <select id="debug-motion">
+          <option value="idle">Idle · ふわふわ</option>
+          <option value="fly">Fly · 飛ぶ</option>
+          <option value="wave">Wave · 手を振る</option>
+          <option value="point">Point · 案内する</option>
+          <option value="celebrate">Celebrate · よろこぶ</option>
+        </select>
+      </label><button id="debug-collect">現在のイベントを完了</button
+      ><button id="debug-final">エンディングへ</button
+      ><button id="debug-reset">進行をリセット</button
+      ><output id="debug-info"></output>
+    </details>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
